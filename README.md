@@ -8,6 +8,15 @@ The template used you can find it here:
 
 [Need Recharge Email Template](./email-template/need-recharge.html)
 
+
+## Env Configurations
+
+```
+EMAIL_FROM_DEFAULT= #email address appears like sender
+POSTMARK_SERVER_API_TOKEN= # token api to send emails
+EMAIL_TO_DEFAULT= # email to send the notifications
+```
+
 ## Deploy and run
 
 The deployment it's made by Continuous Development (CD) direct on Google Cloud Services
