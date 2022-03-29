@@ -10,7 +10,7 @@ steps:
     '--allow-unauthenticated', 
     '--runtime', 'nodejs16', 
     '--entry-point', 'notify_low_balance',
-    '--set-env-vars','EMAIL_FROM_DEFAULT=${_EMAIL_FROM_DEFAULT}, POSTMARK_SERVER_API_TOKEN=${_POSTMARK_SERVER_API_TOKEN}, EMAIL_TO_DEFAULT=${_EMAIL_TO_DEFAULT}']
+    '--set-env-vars','EMAIL_FROM_DEFAULT=${_EMAIL_FROM_DEFAULT},POSTMARK_SERVER_API_TOKEN=${_POSTMARK_SERVER_API_TOKEN},EMAIL_TO_DEFAULT=${_EMAIL_TO_DEFAULT}']
   dir: '.'
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -13,7 +13,8 @@
     "all-test": "npm run unit-test && npm run system-test",
     "testold": "npm -- run unit-test",
     "index-test": "mocha test/index.test.js --timeout=600000 --exit",
-    "test": "npm -- run index-test"
+    "test": "npm -- run index-test",
+    "devDeploy": "node deploy.js"
   },
   "dependencies": {
     "@google-cloud/debug-agent": "^5.0.0",
@@ -23,7 +24,8 @@
     "eth-balance-checker": "^0.1.2",
     "ethers": "^5.5.4",
     "expect.js": "^0.3.1",
-    "postmark": "^3.0.1"
+    "postmark": "^3.0.1",
+    "prompt-confirm": "^2.0.4"
   },
   "devDependencies": {
     "@google-cloud/pubsub": "^2.0.0",
