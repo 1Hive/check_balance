@@ -2,9 +2,6 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
   dir: '.'
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['test']
-  dir: '.'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['functions', 'deploy', 'notify_low_balance', '--trigger-http' , '--allow-unauthenticated', '--runtime', 'nodejs16', '--entry-point', 'notify_low_balance']
   dir: '.'
