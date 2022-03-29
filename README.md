@@ -1,11 +1,16 @@
 # Check Low Balance
 Small Cloud Functions to notify about low balance on the configured walllet address.
 
+## Email Template
+That service notify using the email service.
+
+The template used you can find it here:
+
+[Need Recharge Email Template](./email-template/need-recharge.html)
+
 ## Deploy and run
 
-```
-yarn install
-```
+The deployment it's made by Continuous Development (CD) direct on Google Cloud Services
 
 ## Run the tests
 
