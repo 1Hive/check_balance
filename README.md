@@ -1,39 +1,17 @@
-# check_balance
-Small Cloud Functions to notify about balance on the configured walllet address.
+# Check Low Balance
+Small Cloud Functions to notify about low balance on the configured walllet address.
 
-# Google Cloud Functions - Hello World sample
-
-See:
-
-* [Cloud Functions Hello World tutorial][tutorial]
-* [Cloud Functions Hello World sample source code][code]
-
-[tutorial]: https://cloud.google.com/functions/docs/quickstart
-[code]: index.js
-
-## Deploy and run the sample
-
-See the [Cloud Functions Hello World tutorial][tutorial].
-
-**Note:** in order for the tests to run properly, you'll have to deploy some of the sample functions:
+## Deploy and run
 
 ```
-gcloud functions deploy helloHttp --runtime [YOUR_RUNTIME] --trigger-http
-gcloud functions deploy helloPubSub --trigger-topic $FUNCTIONS_TOPIC --runtime [YOUR_RUNTIME]
-gcloud functions deploy helloGCS --runtime [YOUR_RUNTIME] --trigger-resource $FUNCTIONS_DELETABLE_BUCKET --trigger-event providers/cloud.storage/eventTypes/object.change
+yarn install
 ```
-
-* Replace `[YOUR_RUNTIME]` with the name of the runtime you are using. For a
-complete list, see the [gcloud reference](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--runtime).
 
 ## Run the tests
 
-1. Read and follow the [prerequisites](../../../../#prerequisites).
-
-
 1. Install dependencies:
 
-        npm install
+        yarn install
 
 1. Set the following environment variables:
 
@@ -43,4 +21,4 @@ complete list, see the [gcloud reference](https://cloud.google.com/sdk/gcloud/re
 
 1. Run the tests:
 
-        npm test
+        yarn test
