@@ -1,13 +1,20 @@
-# Check Low Balance
+# Notify Low Balance
 Small Cloud Functions to notify about low balance on the configured walllet address.
+
+![Email notification](./git_assets/email-example.png)
 
 ## Email Template
 That service notify using the email service.
 
 The template used you can find it here:
 
-[Need Recharge Email Template](./email-template/need-recharge.html)
+[Need Recharge Pug Template](./emails/recharge.pug)
 
+[Need Recharge CSS ](./emails/styles.css)
+
+It's use [email-templates](https://github.com/forwardemail/email-templates) that uses [pugjs](https://github.com/pugjs/pug) under the hood. 
+
+Generating compatible email html to be send.
 
 ## Env Configurations
 
@@ -26,12 +33,6 @@ The deployment it's made by Continuous Development (CD) direct on Google Cloud S
 1. Install dependencies:
 
         yarn install
-
-1. Set the following environment variables:
-
-        export GCF_REGION=us-central1
-        export FUNCTIONS_TOPIC=[YOUR_PUBSUB_TOPIC]
-        export FUNCTIONS_DELETABLE_BUCKET=[YOUR_CLOUD_STORAGE_BUCKET]  # will be deleted by tests!
 
 1. Run the tests:
 

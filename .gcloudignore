@@ -12,5 +12,5 @@
 # below:
 .git
 .gitignore
-
+git_assets
 node_modules
