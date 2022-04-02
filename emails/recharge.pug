@@ -1,0 +1,21 @@
+head
+  link(rel="stylesheet", href="styles.css", data-inline)
+  //- link(rel='preconnect' href='https://fonts.googleapis.com')
+  //- link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+  //- link(href='https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap' rel='stylesheet')
+
+ul.list_users.roundedCorner
+  img.logo(src="https://storage.googleapis.com/1hive/assets/mini-logo.png", alt="1Hive logo")
+  p.title List Address need receive recharge
+  each addressObj in notifyAddresses 
+    li.roundedCorner.address_item
+      .label Address:
+        .address #{addressObj.address} 
+      .label Network: 
+        .network #{addressObj.network}
+      .label Current balance: 
+        .balance $ #{addressObj.balanceFormatted} 
+      .label(style="font-size: smaller !important;") below threshold 
+        .threshold $ #{addressObj.minEthersFormatted}
+      .label Link to blockscan
+      <a href="#{addressObj.etherscan}">#{addressObj.etherscan}</a>

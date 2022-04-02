@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const path = require('path');
 const assert = require('assert');
 const expect = require('expect.js');
 const sinon = require('sinon');
 const {request} = require('gaxios');
 const {exec} = require('child_process');
 const waitPort = require('wait-port');
+const Email = require('email-templates');
 
 // const program = require('..');
 const {fromDecimals} = require('../index');
@@ -65,6 +67,71 @@ describe('index.test.js', () => {
       expect(response.status).to.be.equal(200)
       //609512754999813142
       console.log(response.data)
+      // expect(response.data).to.be.equal('Sent')
+      expect('Sent').to.be.equal('Sent')
+    });
+  });
+
+  xdescribe('others logics functions', () => {
+    it('email-templates render', async () => {
+
+      const accResults = [
+        {
+          isSendEmail: true,
+          network: 'Gnosis (xdai)',
+          minEthers: '1000000000000000000',
+          balance: '459065754999813142',
+          minEthersFormatted: '1',
+          balanceFormatted: '0.459065754999813142',
+          etherscan: 'https://blockscout.com/xdai/mainnet/address/0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4',
+          address: '0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4'
+        },
+        {
+          isSendEmail: true,
+          network: 'Rinkeby',
+          minEthers: '1000000000000000000',
+          balance: '57933009357035317',
+          minEthersFormatted: '1',
+          balanceFormatted: '0.057933009357035317',
+          etherscan: 'https://rinkeby.etherscan.io/address/0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4',
+          address: '0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4'
+        }
+      ]
+
+      const email = new Email({
+        juice:true,
+        juiceResources: {
+          preserveImportant: true,
+          webResources: {
+            //
+            // this is the relative directory to your CSS/image assets
+            // and its default path is `build/`:
+            //
+            // e.g. if you have the following in the `<head`> of your template:
+            // `<link rel="stylesheet" href="style.css" data-inline="data-inline">`
+            // then this assumes that the file `build/style.css` exists
+            //
+            // relativeTo: path.join(__dirname, '..', 'emails')
+            relativeTo: path.resolve('emails')
+            //
+            // but you might want to change it to something like:
+            // relativeTo: path.join(__dirname, '..', 'assets')
+            // (so that you can re-use CSS/images that are used in your web-app)
+            //
+          }
+        }});
+      let message= 'message empty'
+      try {
+        message = await email
+          .render('recharge', {
+            notifyAddresses: accResults
+          })
+      } catch (error) {
+        console.error(error)
+        throw error
+      }
+
+      console.log(message)
       // expect(response.data).to.be.equal('Sent')
       expect('Sent').to.be.equal('Sent')
     });

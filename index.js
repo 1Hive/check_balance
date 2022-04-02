@@ -14,7 +14,7 @@
 
 'use strict';
 
-BigInt.prototype.toJSON = function() { return this.toString()  }
+BigInt.prototype.toJSON = function () { return this.toString() }
 
 /* eslint-disable no-unused-vars */
 
@@ -25,63 +25,88 @@ BigInt.prototype.toJSON = function() { return this.toString()  }
 
 // [START functions_helloworld_get]
 const functions = require('@google-cloud/functions-framework');
+const Email = require('email-templates');
+const path = require('path');
 
-const {getEtherBalances}= require('@mycrypto/eth-scan');
+const { getEtherBalances } = require('@mycrypto/eth-scan');
 const { ServerClient } = require('postmark');
 require('dotenv').config()
 const fs = require('fs');
 // Register an HTTP function with the Functions Framework that will be executed
 // when you make an HTTP request to the deployed function's endpoint.
 functions.http('notify_low_balance', async (req, res) => {
-  const {POSTMARK_SERVER_API_TOKEN, EMAIL_FROM_DEFAULT, EMAIL_TO_DEFAULT} = process.env
+  const { POSTMARK_SERVER_API_TOKEN, EMAIL_FROM_DEFAULT, EMAIL_TO_DEFAULT } = process.env // TODO Implement multiples emails to notify
   const chains = [
     {
-      network:'Gnosis (xdai)'
-      ,provider:'https://rpc.xdaichain.com'
-      ,etherscan:'https://blockscout.com/xdai/mainnet/address/{{address}}'
-      ,minEthers: '1'.padEnd(19, '0')
+      network: 'Gnosis (xdai)'
+      , provider: 'https://rpc.xdaichain.com'
+      , etherscan: 'https://blockscout.com/xdai/mainnet/address/{{address}}'
+      , minEthers: '1'.padEnd(19, '0')
     },
     {
-      network:'Rinkeby',
-      provider:'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
-      ,etherscan:'https://rinkeby.etherscan.io/address/{{address}}'
+      network: 'Rinkeby',
+      provider: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
+      , etherscan: 'https://rinkeby.etherscan.io/address/{{address}}'
+      , addresses:['0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4'] // TODO: Implement multiples address
     },
-    // {
-    //   network:'Polygon Mainnet',
-    //   provider:'https://polygon-rpc.com'
-    //   ,etherscan:'https://polygonscan.com/address/{{address}}'
-    // },
-    // {
-    //   network:'Polygon Mumbai',
-    //   provider:'https://rpc-mumbai.maticvigil.com'
-    //   ,etherscan:'https://mumbai.polygonscan.com/address/{{address}}'
-    // },
+    {
+      network:'Polygon Mainnet',
+      provider:'https://polygon-rpc.com'
+      ,etherscan:'https://polygonscan.com/address/{{address}}'
+      , addresses:['0x6a36a7340ea6339d9763094d65445fbd9bf50077']
+    },
+    {
+      network:'Polygon Mumbai',
+      provider:'https://rpc-mumbai.maticvigil.com'
+      ,etherscan:'https://mumbai.polygonscan.com/address/{{address}}'
+    },
   ]
   const accResults = []
-  
+
   for (const chain of chains) {
     const address = chain.address ?? '0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4';
     const result = await getEtherBalances(chain.provider, [address])
-    let checkResult = this.checkBalanceSendEmail(result, address, chain);
-    const msg = this.replacementVar(checkResult.message, checkResult)
-    checkResult = {...checkResult, message: msg}
-    accResults.push(checkResult)
+    let checkResult = await this.checkBalanceByAddress(result, address, chain);
+    
+      accResults.push(checkResult)
+    // }
   }
 
-  for (const objResult of accResults) {
-    if (objResult.isSendEmail === true && EMAIL_TO_DEFAULT && POSTMARK_SERVER_API_TOKEN && EMAIL_FROM_DEFAULT){
-      // Send email here
-      const postmarkClient = new ServerClient(POSTMARK_SERVER_API_TOKEN)
-      postmarkClient.sendEmail({
-        From:EMAIL_FROM_DEFAULT,
-        To:EMAIL_TO_DEFAULT,
-        HtmlBody:objResult.message,
-        Subject:'Balance Notification'
+  const email = new Email({
+    juice:true,
+    juiceResources: {
+      preserveImportant: true,
+      webResources: {
+        relativeTo: path.resolve('emails')
+      }
+    }});
+
+
+  let message= 'message empty'
+  try {
+    message = await email
+      .render('recharge', {
+        notifyAddresses: accResults
       })
-    }
+  } catch (error) {
+    console.error(error)
+    throw error
   }
 
-  res.send(accResults)
+  // for (const objResult of accResults) {
+  //   if (objResult.isSendEmail === true && EMAIL_TO_DEFAULT && POSTMARK_SERVER_API_TOKEN && EMAIL_FROM_DEFAULT) {
+  //     // Send email here
+  //     const postmarkClient = new ServerClient(POSTMARK_SERVER_API_TOKEN)
+  //     postmarkClient.sendEmail({
+  //       From: EMAIL_FROM_DEFAULT,
+  //       To: EMAIL_TO_DEFAULT,
+  //       HtmlBody: objResult.message,
+  //       Subject: 'Balance Notification'
+  //     })
+  //   }
+  // }
+
+  res.send(message)
 
 });
 
@@ -91,11 +116,11 @@ functions.http('notify_low_balance', async (req, res) => {
  * @param {!express:Request} req HTTP request context.
  * @param {!express:Response} res HTTP response context.
  */
- functions.http('checkBalance',(req, res) => {
+functions.http('checkBalance', (req, res) => {
   getEtherBalances('https://rpc.xdaichain.com', [
     '0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4'
-  ]).then(result=>{
-    BigInt.prototype.toJSON = function() { return this.toString()  }
+  ]).then(result => {
+    BigInt.prototype.toJSON = function () { return this.toString() }
 
     res.send(JSON.stringify(result['0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4']));
   });
@@ -109,7 +134,7 @@ functions.http('notify_low_balance', async (req, res) => {
  * @param {string} num the number
  * @returns {Array<string>} array with the [<whole>, <decimal>] parts of the number
  */
- exports.splitDecimalNumber = (num) => {
+exports.splitDecimalNumber = (num) => {
   const [whole = '', dec = ''] = num.split('.')
   return [
     whole.replace(/^0*/, ''), // trim leading zeroes
@@ -117,7 +142,7 @@ functions.http('notify_low_balance', async (req, res) => {
   ]
 }
 
-exports.fromDecimals = (num, decimals, { truncate = true } = {}) =>{
+exports.fromDecimals = (num, decimals, { truncate = true } = {}) => {
   const [whole, dec] = this.splitDecimalNumber(num)
   if (!whole && !dec) {
     return '0'
@@ -142,10 +167,10 @@ exports.fromDecimals = (num, decimals, { truncate = true } = {}) =>{
   return wholeWithoutBase
 }
 
-exports.checkBalanceSendEmail = (result, address, chain)=>{
-  let {network, etherscan} = chain
+exports.checkBalanceByAddress = async (result, address, chain) => {
+  let { network, etherscan } = chain
 
-  etherscan = replaceAllVar(etherscan,'address',address)
+  etherscan = replaceAllVar(etherscan, 'address', address) // TODO: Remove it and put all in pug template.
 
   const balance = result[address].toString();
   const minEthers = chain.minEthers ?? '1'.padEnd(19, '0');
@@ -157,31 +182,31 @@ exports.checkBalanceSendEmail = (result, address, chain)=>{
   if (balanceFormatted > minEthersFormatted) {
     message = `All Good: Ethers above the threshold: ${minEthersFormatted} - current balance (${balanceFormatted}) to address: ${address}`;
   } else {
-    message = fs.readFileSync('email-template/need-recharge.html', 'utf8');
-    isSendEmail = true
+    isSendEmail = true;
   }
-  return {isSendEmail, network, minEthers, balance, minEthersFormatted, balanceFormatted, message, etherscan, address};
+
+  return { isSendEmail, network, minEthers, balance, minEthersFormatted, balanceFormatted, message, etherscan, address };
 }
 
-exports.replacementVar = (message, replacements)=>{
+exports.replacementVar = (message, replacements) => {
   const subject = 'Balance Notification';
   let ret;
-    if (message) {
-      const replacement = {
-        ...replacements,
-        subject,
-      };
+  if (message) {
+    const replacement = {
+      ...replacements,
+      subject,
+    };
 
-      for (const key in replacement) {
-        if (Object.hasOwnProperty.call(replacement, key)) {
-          const value = replacement[key];
-          message = replaceAllVar(message, key, value);
-        }
+    for (const key in replacement) {
+      if (Object.hasOwnProperty.call(replacement, key)) {
+        const value = replacement[key];
+        message = replaceAllVar(message, key, value);
       }
-      ret = message
-      }
-      return ret;
     }
+    ret = message
+  }
+  return ret;
+}
 function replaceAllVar(message, key, value) {
   message = message.replace(new RegExp(`{{${key}}}`, 'g'), value);
   return message;

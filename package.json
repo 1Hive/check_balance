@@ -20,12 +20,14 @@
     "@google-cloud/debug-agent": "^5.0.0",
     "@google-cloud/functions-framework": "^2.0.0",
     "@mycrypto/eth-scan": "^3.5.3",
+    "email-templates": "^9.0.0",
     "escape-html": "^1.0.3",
     "eth-balance-checker": "^0.1.2",
     "ethers": "^5.5.4",
     "expect.js": "^0.3.1",
     "postmark": "^3.0.1",
-    "prompt-confirm": "^2.0.4"
+    "prompt-confirm": "^2.0.4",
+    "pug": "^3.0.2"
   },
   "devDependencies": {
     "@google-cloud/pubsub": "^2.0.0",
