@@ -21,7 +21,7 @@ Generating compatible email html to be send.
 ```
 EMAIL_FROM_DEFAULT= #email address appears like sender
 POSTMARK_SERVER_API_TOKEN= # token api to send emails
-EMAIL_TO_DEFAULT= # email to send the notifications
+LIST_EMAIL_TO= # list of email to send the notifications
 ```
 
 ## Deploy and run

@@ -49,10 +49,52 @@ const httpInvocation = (fnUrl, port, data) => {
   }
 };
 
+const proxyquire = require('proxyquire');
+
+var index = proxyquire('../', { './logging': {
+  log:console.log,
+  error:console.error,
+} });
 
 describe('index.test.js', () => {
-  
-  describe('notify_low_balance', () => {
+ 
+  describe('splitEmails function', () => {
+    it('it should return empty array', async () => {
+      const arrEmails = index.splitEmails("")
+      expect(arrEmails).to.be.eql([])
+    });
+    it('it should return array 2 length', async () => {
+      const arrEmails = index.splitEmails("some@email.com,anything@email.com")
+      expect(arrEmails).to.be.eql(['some@email.com','anything@email.com'])
+      expect(arrEmails.length).to.be.eql(2)
+    });
+
+    it('it should return array 1 length removing comma', async () => {
+      const arrEmails = index.splitEmails("some@email.com,")
+      expect(arrEmails).to.be.eql(['some@email.com'])
+      expect(arrEmails.length).to.be.eql(1)
+    });
+
+    it('it should return array 1 length', async () => {
+      const arrEmails = index.splitEmails("some@email.com")
+      expect(arrEmails).to.be.eql(['some@email.com'])
+      expect(arrEmails.length).to.be.eql(1)
+    });
+
+  });
+
+  describe('Calling function directly notify_low_balance', () => {
+    it('notify_low_balance: should notify', async () => {
+
+      await index.notify_low_balance({},{
+        send:(msg)=>{
+          expect(msg).to.be.ok()
+        }
+      })
+    });
+  });
+
+  xdescribe('notify_low_balance via HTTP', () => {
     const PORT = 8083;
     let ffProc;
 
@@ -63,12 +105,11 @@ describe('index.test.js', () => {
     after(() => ffProc?.kill());
 
     it('notify_low_balance: should notify', async () => {
+
       const response = await httpInvocation('notify_low_balance', PORT);
       expect(response.status).to.be.equal(200)
-      //609512754999813142
-      console.log(response.data)
       // expect(response.data).to.be.equal('Sent')
-      expect('Sent').to.be.equal('Sent')
+      // expect('Sent').to.be.equal('Sent')
     });
   });
 

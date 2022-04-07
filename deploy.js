@@ -4,10 +4,10 @@ const {spawn} = require('child_process');
 var cmd = 'gcloud' 
 let cmdCross = process.platform === "win32" ? `${cmd}.cmd`: cmd
 
-const {EMAIL_FROM_DEFAULT,POSTMARK_SERVER_API_TOKEN,EMAIL_TO_DEFAULT} = process.env
+const {EMAIL_FROM_DEFAULT,POSTMARK_SERVER_API_TOKEN,LIST_EMAIL_TO,SUBJECT} = process.env
 
 
-if (!EMAIL_TO_DEFAULT || !POSTMARK_SERVER_API_TOKEN || !EMAIL_TO_DEFAULT){
+if (!LIST_EMAIL_TO || !POSTMARK_SERVER_API_TOKEN || !LIST_EMAIL_TO){
   throw new Error('.env file with envs not found')
 }
   
@@ -15,7 +15,7 @@ function spawnUpdateVars() {
   const ls = spawn(
       cmdCross, ['functions', 'deploy',`notify_low_balance`, 
     `--set-env-vars`, 
-    `EMAIL_FROM_DEFAULT=${EMAIL_FROM_DEFAULT},POSTMARK_SERVER_API_TOKEN=${POSTMARK_SERVER_API_TOKEN},EMAIL_TO_DEFAULT=${EMAIL_TO_DEFAULT}`]
+    `EMAIL_FROM_DEFAULT=${EMAIL_FROM_DEFAULT},POSTMARK_SERVER_API_TOKEN=${POSTMARK_SERVER_API_TOKEN},LIST_EMAIL_TO="${LIST_EMAIL_TO}",SUBJECT=${SUBJECT}`]
   )
   
   process.on('SIGINT', () => {
