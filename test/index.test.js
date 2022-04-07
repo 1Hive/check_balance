@@ -64,13 +64,13 @@ describe('index.test.js', () => {
       expect(arrEmails).to.be.eql([])
     });
     it('it should return array 2 length', async () => {
-      const arrEmails = index.splitEmails("some@email.com,anything@email.com")
+      const arrEmails = index.splitEmails("some@email.com|anything@email.com")
       expect(arrEmails).to.be.eql(['some@email.com','anything@email.com'])
       expect(arrEmails.length).to.be.eql(2)
     });
 
     it('it should return array 1 length removing comma', async () => {
-      const arrEmails = index.splitEmails("some@email.com,")
+      const arrEmails = index.splitEmails("some@email.com|")
       expect(arrEmails).to.be.eql(['some@email.com'])
       expect(arrEmails.length).to.be.eql(1)
     });
@@ -83,7 +83,7 @@ describe('index.test.js', () => {
 
   });
 
-  describe('Calling function directly notify_low_balance', () => {
+  xdescribe('Calling function directly notify_low_balance', () => {
     it('notify_low_balance: should notify', async () => {
 
       await index.notify_low_balance({},{

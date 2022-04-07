@@ -44,7 +44,7 @@ functions.http("notify_low_balance", async (req, res) => {
 });
 
 exports.splitEmails = (listEmail) => {
-  const arrEmails = listEmail.split(",");
+  const arrEmails = listEmail.split("|");
   return arrEmails.filter((email) => email != "");
 };
 
