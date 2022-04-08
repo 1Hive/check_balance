@@ -24,9 +24,9 @@ POSTMARK_SERVER_API_TOKEN= # token api to send emails
 LIST_EMAIL_TO= # list of email to send the notifications
 ```
 
-## Deploy and run
+## Deploy
 
-The deployment it's made by Continuous Development (CD) direct on Google Cloud Services
+The Continuous Deployment (CD) is made by Google Build only when new tag version is created. (Tag name need match that regex: v*)
 
 ## Run the tests
 
