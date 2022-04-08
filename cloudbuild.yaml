@@ -1,5 +1,6 @@
 steps:
-- name: 'gcr.io/cloud-builders/yarn:node-16.0.0'
+- name: 'node:16.14.0-slim'
+  entrypoint: 'yarn'
   args: ['install','--ignore-engines']
   dir: '.'
 - name: 'gcr.io/cloud-builders/gcloud'
