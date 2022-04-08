@@ -33,9 +33,8 @@ const path = require("path");
 const { getEtherBalances } = require("@mycrypto/eth-scan");
 const { ServerClient } = require("postmark");
 require("dotenv").config();
-const fs = require("fs");
 
-const Logging = require("./logging");
+const { Logging } = require("./logging");
 
 // Register an HTTP function with the Functions Framework that will be executed
 // when you make an HTTP request to the deployed function's endpoint.
