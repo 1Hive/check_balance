@@ -62,7 +62,7 @@ exports.notify_low_balance = async (req, res) => {
   const chains = [
     {
       network: "Gnosis (xdai)",
-      provider: "https://rpc.xdaichain.com",
+      provider: "https://rpc.gnosischain.com",
       etherscan: "https://blockscout.com/xdai/mainnet/address/{{address}}",
       minEthers: "1".padEnd(19, "0"),
       addresses: ["0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4"],
@@ -169,7 +169,7 @@ exports.notify_low_balance = async (req, res) => {
  * @param {!express:Response} res HTTP response context.
  */
 functions.http("checkBalance", (req, res) => {
-  getEtherBalances("https://rpc.xdaichain.com", [
+  getEtherBalances("https://rpc.gnosischain.com", [
     "0xE533BbAC5aA719f15ebfccf7050621a8A4Ff52b4",
   ]).then((result) => {
     BigInt.prototype.toJSON = function () {
